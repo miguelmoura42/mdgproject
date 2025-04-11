@@ -8,7 +8,7 @@ import mdg.miguel.mdgproject.enums.PaymentMethod;
 import mdg.miguel.mdgproject.enums.PaymentType;
 
 public record PaymentReceiptDTO(String description, PaymentType paymentType,
-        PaymentMethod paymentMethod, LocalDate paymentDate,
-        String paymentAmount, MultipartFile receiptFile) {
+                PaymentMethod paymentMethod, LocalDate paymentDate,
+                Long paymentAmount, MultipartFile receiptFile) {
 
 }

@@ -15,7 +15,7 @@ import mdg.miguel.mdgproject.enums.PaymentMethod;
 import mdg.miguel.mdgproject.enums.PaymentType;
 
 @Entity
-@Table(name = "tb_receipts")
+@Table(name = "tb_recibos")
 public class PaymentReceipt {
 
   @Id
@@ -29,7 +29,7 @@ public class PaymentReceipt {
   private PaymentMethod paymentMethod;
 
   private LocalDate paymentDate;
-  private String paymentAmount;
+  private Long paymentAmount;
   private String receiptFilePath;
   @Column(unique = true, nullable = false)
   private UUID uuid = UUID.randomUUID();
@@ -38,7 +38,7 @@ public class PaymentReceipt {
   }
 
   public PaymentReceipt(Long id, String description, PaymentType paymentType, PaymentMethod paymentMethod,
-      LocalDate paymentDate, String paymentAmount, String receiptFilePath, UUID uuid) {
+      LocalDate paymentDate, Long paymentAmount, String receiptFilePath, UUID uuid) {
     this.id = id;
     this.description = description;
     this.paymentType = paymentType;
@@ -89,11 +89,11 @@ public class PaymentReceipt {
     this.paymentDate = paymentDate;
   }
 
-  public String getPaymentAmount() {
+  public Long getPaymentAmount() {
     return paymentAmount;
   }
 
-  public void setPaymentAmount(String paymentAmount) {
+  public void setPaymentAmount(Long paymentAmount) {
     this.paymentAmount = paymentAmount;
   }
 

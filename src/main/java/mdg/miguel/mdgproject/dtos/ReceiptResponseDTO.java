@@ -11,14 +11,14 @@ public class ReceiptResponseDTO {
   private PaymentType paymentType;
   private PaymentMethod paymentMethod;
   private LocalDate paymentDate;
-  private String paymentAmount;
+  private Long paymentAmount;
   private UUID uuid;
 
   public ReceiptResponseDTO() {
   }
 
   public ReceiptResponseDTO(String description, PaymentType paymentType, PaymentMethod paymentMethod,
-      LocalDate paymentDate, String paymentAmount, UUID uuid) {
+      LocalDate paymentDate, Long paymentAmount, UUID uuid) {
     this.description = description;
     this.paymentType = paymentType;
     this.paymentMethod = paymentMethod;
@@ -59,11 +59,11 @@ public class ReceiptResponseDTO {
     this.paymentDate = paymentDate;
   }
 
-  public String getPaymentAmount() {
+  public Long getPaymentAmount() {
     return paymentAmount;
   }
 
-  public void setPaymentAmount(String paymentAmount) {
+  public void setPaymentAmount(Long paymentAmount) {
     this.paymentAmount = paymentAmount;
   }
 

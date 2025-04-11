@@ -37,7 +37,7 @@ public class ResellerController {
     return ResponseEntity.ok(result);
   }
 
-  @GetMapping("/buscar/por-cidade")
+  @GetMapping("/buscar-por-cidade")
   public ResponseEntity<List<ResellerDTO>> searchResellersByCity(@RequestParam Cities city) {
     List<ResellerDTO> result = resellerService.searchByCity(city);
     return ResponseEntity.ok(result);

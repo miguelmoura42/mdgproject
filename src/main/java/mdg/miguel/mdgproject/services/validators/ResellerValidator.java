@@ -4,13 +4,14 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import mdg.miguel.mdgproject.dtos.ResellerDTO;
 import mdg.miguel.mdgproject.exceptions.ResellerValidatorException;
 import mdg.miguel.mdgproject.repositories.ResellerRepository;
 
-@Service
+@Component
 public class ResellerValidator {
 
   private ResellerRepository resellerRepository;

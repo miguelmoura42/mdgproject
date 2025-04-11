@@ -5,24 +5,27 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import mdg.miguel.mdgproject.dtos.PaymentReceiptDTO;
 import mdg.miguel.mdgproject.exceptions.ReceiptValidationException;
 
-@Service
+@Component
 public class ReceiptValidator {
 
   public void validate(PaymentReceiptDTO dto) {
     Map<String, String> errors = new LinkedHashMap<>();
 
     Map<Supplier<Boolean>, String> validations = new LinkedHashMap<>();
-    validations.put(() -> isNullOrEmpty(dto.description()), "Descrição é um campo obrigatório");
+    validations.put(() -> dto.description() == null || dto.description().trim().isEmpty(),
+        "Descrição é um campo obrigatório");
     validations.put(() -> dto.paymentType() == null, "Tipo de pagamento é um campo obrigatório");
     validations.put(() -> dto.paymentMethod() == null, "Método de pagamento é um campo obrigatório");
     validations.put(() -> dto.paymentDate() == null, "Data é um campo obrigatório");
     validations.put(() -> dto.paymentDate().isAfter(LocalDate.now()), "Data inválida: não pode ser futura");
-    validations.put(() -> isNullOrEmpty(dto.paymentAmount()), "Valor do pagamento é um campo obrigatório");
+    validations.put(() -> dto.paymentAmount() == null || dto.paymentAmount() <= 0,
+        "Valor do pagamento inválido, verifique o valor informado.");
     validations.put(() -> dto.receiptFile() == null || dto.receiptFile().isEmpty(),
         "Comprovante de pagamento é obrigatório");
 
@@ -36,9 +39,4 @@ public class ReceiptValidator {
       throw new ReceiptValidationException(errors);
     }
   }
-
-  private boolean isNullOrEmpty(String value) {
-    return value == null || value.trim().isEmpty();
-  }
-
 }

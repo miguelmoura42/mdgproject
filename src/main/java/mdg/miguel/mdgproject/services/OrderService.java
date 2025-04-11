@@ -37,7 +37,7 @@ public class OrderService {
     var order = new Order();
     BeanUtils.copyProperties(dto, order);
     order.setReseller(reseller);
-    String orderCode = generateOrderCode(reseller);
+    String orderCode = generateOrderCode();
     order.setOrderCode(orderCode);
 
     orderRepository.save(order);
@@ -65,7 +65,7 @@ public class OrderService {
     order.setStatus(dto.getNewStatus());
   }
 
-  private String generateOrderCode(Reseller reseller) {
+  private String generateOrderCode() {
     String prefix = "PED";
     String datePart = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
     String uniquePart = UUID.randomUUID().toString().substring(0, 5).toUpperCase();

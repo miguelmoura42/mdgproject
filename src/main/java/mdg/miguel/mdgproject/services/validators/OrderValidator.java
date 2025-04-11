@@ -5,12 +5,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import mdg.miguel.mdgproject.dtos.OrderDTO;
 import mdg.miguel.mdgproject.exceptions.OrderValidationException;
 
-@Service
+@Component
 public class OrderValidator {
 
   public void validate(OrderDTO dto) {
