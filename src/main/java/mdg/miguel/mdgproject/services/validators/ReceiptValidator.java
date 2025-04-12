@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import mdg.miguel.mdgproject.dtos.PaymentReceiptDTO;
 import mdg.miguel.mdgproject.exceptions.ReceiptValidationException;

@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import mdg.miguel.mdgproject.exceptions.OrderNotFoundException;
 import mdg.miguel.mdgproject.exceptions.OrderValidationException;
+import mdg.miguel.mdgproject.exceptions.ProductionNotFoundException;
+import mdg.miguel.mdgproject.exceptions.ProductionValidationExption;
 import mdg.miguel.mdgproject.exceptions.ReceiptFileStorageException;
 import mdg.miguel.mdgproject.exceptions.ReceiptNotFoundException;
 import mdg.miguel.mdgproject.exceptions.ReceiptValidationException;
@@ -51,6 +53,17 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(OrderNotFoundException.class)
   public ResponseEntity<String> handleOrderNotFoundException(OrderNotFoundException ex) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+  }
+
+  @ExceptionHandler(ProductionValidationExption.class)
+  public ResponseEntity<Map<String, String>> handleProductionValidationExption(ProductionValidationExption ex) {
+    Map<String, String> error = Map.of("fileError", ex.getMessage());
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+  }
+
+  @ExceptionHandler(ProductionNotFoundException.class)
+  public ResponseEntity<String> handleProductionNotFoundException(ProductionNotFoundException ex) {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
   }
 

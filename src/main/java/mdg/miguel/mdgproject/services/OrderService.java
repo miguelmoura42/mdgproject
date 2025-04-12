@@ -12,7 +12,6 @@ import mdg.miguel.mdgproject.dtos.OrderDTO;
 import mdg.miguel.mdgproject.dtos.OrderResponseDTO;
 import mdg.miguel.mdgproject.dtos.UpdateOrderStatusDTO;
 import mdg.miguel.mdgproject.entities.Order;
-import mdg.miguel.mdgproject.entities.Reseller;
 import mdg.miguel.mdgproject.exceptions.OrderNotFoundException;
 import mdg.miguel.mdgproject.repositories.OrderRepository;
 import mdg.miguel.mdgproject.services.validators.OrderValidator;
