@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import mdg.miguel.mdgproject.dtos.ProductionDTO;
 import mdg.miguel.mdgproject.dtos.ProductionResponseDTO;
 import mdg.miguel.mdgproject.services.ProductionService;
@@ -25,13 +26,13 @@ public class ProductionController {
     this.productionService = productionService;
   }
 
-  @PostMapping("/cadastrar")
-  public ResponseEntity<String> newDailyProduction(@RequestBody ProductionDTO dto) {
+  @PostMapping
+  public ResponseEntity<String> newDailyProduction(@RequestBody @Valid ProductionDTO dto) {
     productionService.save(dto);
     return ResponseEntity.ok("Produção do dia " + dto.getDate() + " salva com sucesso!");
   }
 
-  @GetMapping("/buscar")
+  @GetMapping
   public ResponseEntity<ProductionResponseDTO> getProduction(
       @RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate date) {
 

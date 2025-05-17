@@ -51,10 +51,7 @@ public class ReceiptService {
 
   public List<ReceiptResponseDTO> getReceiptsByPaymentType(PaymentType paymentType, LocalDate startDate,
       LocalDate endDate) {
-    if (startDate.isAfter(endDate)) {
-      throw new IllegalArgumentException("Data inicial não pode ser após a data final.");
-    }
-
+    validateDateRange(startDate, endDate);
     List<PaymentReceipt> receipts = receiptRepository.findByPaymentTypeAndPaymentDateBetween(paymentType, startDate,
         endDate);
     return receipts.stream().map(this::convertToDto).collect(Collectors.toList());
@@ -62,11 +59,9 @@ public class ReceiptService {
 
   public List<ReceiptResponseDTO> getReceiptsByPaymentMethod(PaymentMethod paymentMethod, LocalDate startDate,
       LocalDate endDate) {
-    if (startDate.isAfter(endDate)) {
-      throw new IllegalArgumentException("Data inicial não pode ser após a data final.");
-    }
-    List<PaymentReceipt> receipts = receiptRepository.findByPaymentMethodAndPaymentDateBetween(paymentMethod,
-        startDate, endDate);
+    validateDateRange(startDate, endDate);
+    List<PaymentReceipt> receipts = receiptRepository.findByPaymentMethodAndPaymentDateBetween(paymentMethod, startDate,
+        endDate);
     return receipts.stream().map(this::convertToDto).collect(Collectors.toList());
   }
 
@@ -112,4 +107,14 @@ public class ReceiptService {
     BeanUtils.copyProperties(receipts, response);
     return response;
   }
+
+  private void validateDateRange(LocalDate startDate, LocalDate endDate) {
+    if (startDate == null || endDate == null) {
+      throw new IllegalArgumentException("Datas de início e fim não podem ser nulas.");
+    }
+    if (startDate.isAfter(endDate)) {
+      throw new IllegalArgumentException("Data inicial não pode ser após a data final.");
+    }
+  }
+
 }

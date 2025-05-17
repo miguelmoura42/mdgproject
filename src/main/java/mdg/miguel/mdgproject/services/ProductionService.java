@@ -28,8 +28,6 @@ public class ProductionService {
 
     var production = new DailyProduction();
     BeanUtils.copyProperties(dto, production);
-    production.setTotalProduction(dto.getMorningProduction() + dto.getAfternoonProduction());
-
     productionRepository.save(production);
   }
 

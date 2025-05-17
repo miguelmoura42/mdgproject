@@ -1,7 +1,9 @@
 package mdg.miguel.mdgproject.controllers;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,15 +33,23 @@ public class ResellerController {
     return ResponseEntity.ok("Revendedor cadastrado com sucesso!");
   }
 
-  @GetMapping("/buscar")
-  public ResponseEntity<List<ResellerDTO>> searchResellers(@RequestParam String name) {
-    List<ResellerDTO> result = resellerService.searchByName(name);
+  @GetMapping("/busca")
+  public ResponseEntity<Page<ResellerDTO>> searchResellers(
+      @RequestParam String name,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "20") int size) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
+    Page<ResellerDTO> result = resellerService.searchByName(name, pageable);
     return ResponseEntity.ok(result);
   }
 
-  @GetMapping("/buscar-por-cidade")
-  public ResponseEntity<List<ResellerDTO>> searchResellersByCity(@RequestParam Cities city) {
-    List<ResellerDTO> result = resellerService.searchByCity(city);
+  @GetMapping("/busca-por-cidade")
+  public ResponseEntity<Page<ResellerDTO>> searchResellersByCity(
+      @RequestParam Cities city,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "20") int size) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
+    Page<ResellerDTO> result = resellerService.searchByCity(city, pageable);
     return ResponseEntity.ok(result);
   }
 

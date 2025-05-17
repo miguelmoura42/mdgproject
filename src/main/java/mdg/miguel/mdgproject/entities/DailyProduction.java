@@ -18,19 +18,17 @@ public class DailyProduction {
   private Long id;
   private Long morningProduction;
   private Long afternoonProduction;
-  private Long totalProduction;
   @Column(unique = true)
   private LocalDate date;
 
   public DailyProduction() {
   }
 
-  public DailyProduction(Long id, Long morningProduction, Long afternoonProduction, Long totalProduction,
+  public DailyProduction(Long id, Long morningProduction, Long afternoonProduction,
       LocalDate date) {
     this.id = id;
     this.morningProduction = morningProduction;
     this.afternoonProduction = afternoonProduction;
-    this.totalProduction = totalProduction;
     this.date = date;
   }
 
@@ -56,14 +54,6 @@ public class DailyProduction {
 
   public void setAfternoonProduction(Long afternoonProduction) {
     this.afternoonProduction = afternoonProduction;
-  }
-
-  public Long getTotalProduction() {
-    return totalProduction;
-  }
-
-  public void setTotalProduction(Long totalProduction) {
-    this.totalProduction = totalProduction;
   }
 
   public LocalDate getDate() {

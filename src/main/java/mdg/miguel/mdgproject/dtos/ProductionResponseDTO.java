@@ -6,16 +6,14 @@ public class ProductionResponseDTO {
 
   private Long morningProduction;
   private Long afternoonProduction;
-  private Long totalProduction;
   private LocalDate date;
 
   public ProductionResponseDTO() {
   }
 
-  public ProductionResponseDTO(Long morningProduction, Long afternoonProduction, Long totalProduction, LocalDate date) {
+  public ProductionResponseDTO(Long morningProduction, Long afternoonProduction, LocalDate date) {
     this.morningProduction = morningProduction;
     this.afternoonProduction = afternoonProduction;
-    this.totalProduction = totalProduction;
     this.date = date;
   }
 
@@ -33,14 +31,6 @@ public class ProductionResponseDTO {
 
   public void setAfternoonProduction(Long afternoonProduction) {
     this.afternoonProduction = afternoonProduction;
-  }
-
-  public Long getTotalProduction() {
-    return totalProduction;
-  }
-
-  public void setTotalProduction(Long totalProduction) {
-    this.totalProduction = totalProduction;
   }
 
   public LocalDate getDate() {

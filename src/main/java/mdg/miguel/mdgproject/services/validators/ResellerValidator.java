@@ -13,7 +13,7 @@ import mdg.miguel.mdgproject.repositories.ResellerRepository;
 @Component
 public class ResellerValidator {
 
-  private ResellerRepository resellerRepository;
+  private final ResellerRepository resellerRepository;
 
   public ResellerValidator(ResellerRepository resellerRepository) {
     this.resellerRepository = resellerRepository;
@@ -22,15 +22,23 @@ public class ResellerValidator {
   public void validateDto(ResellerDTO dto) {
     Map<String, String> errors = new LinkedHashMap<>();
 
-    Map<Supplier<Boolean>, String> validations = new LinkedHashMap<>();
-    validations.put(() -> dto.getName() == null || dto.getName().trim().isEmpty(), "Nome é um campo obrigatório!");
-    validations.put(() -> resellerRepository.existsByName(dto.getName()), "Revendedor já existente!");
-    validations.put(() -> resellerRepository.existsByUniqueKey(dto.getUniqueKey()), "Chave única já existente!");
-    validations.put(() -> dto.getCity() == null, "Cidade é um campo obrigatório!");
+    String name = dto.getName() != null ? dto.getName().trim().toUpperCase() : null;
 
-    validations.forEach((condition, message) -> {
+    Map<String, Supplier<Boolean>> validations = new LinkedHashMap<>();
+    validations.put("nome.nulo", () -> name == null || name.isEmpty());
+    validations.put("nome.duplicado", () -> name != null && resellerRepository.existsByName(name));
+    validations.put("chave.duplicada", () -> resellerRepository.existsByUniqueKey(dto.getUniqueKey()));
+    validations.put("cidade.nula", () -> dto.getCity() == null);
+
+    Map<String, String> messages = Map.of(
+        "nome.nulo", "Nome é um campo obrigatório.",
+        "nome.duplicado", "Já existe um revendedor com esse nome.",
+        "chave.duplicada", "Chave única já existente.",
+        "cidade.nula", "Cidade é um campo obrigatório.");
+
+    validations.forEach((key, condition) -> {
       if (condition.get()) {
-        errors.put(message.split(" ")[0].toLowerCase(), message);
+        errors.put(key, messages.get(key));
       }
     });
 
@@ -38,5 +46,4 @@ public class ResellerValidator {
       throw new ResellerValidatorException(errors);
     }
   }
-
 }

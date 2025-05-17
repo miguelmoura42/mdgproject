@@ -2,10 +2,11 @@ package mdg.miguel.mdgproject.services;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import mdg.miguel.mdgproject.dtos.OrderDTO;
@@ -42,19 +43,21 @@ public class OrderService {
     orderRepository.save(order);
   }
 
-  public List<OrderResponseDTO> getOrdersByReseller(Long resellerId, LocalDate firstDate, LocalDate lastDate) {
+  public Page<OrderResponseDTO> getOrdersByReseller(Long resellerId, LocalDate firstDate, LocalDate lastDate,
+      Pageable pageable) {
+
     if (firstDate.isAfter(lastDate)) {
       throw new IllegalArgumentException("Data inicial não pode ser após a data final.");
     }
 
-    List<Order> orders = orderRepository.findByResellerIdAndDateBetween(resellerId, firstDate, lastDate);
+    Page<Order> orders = orderRepository.findByResellerIdAndDateBetween(resellerId, firstDate, lastDate, pageable);
+
     if (orders.isEmpty()) {
       throw new OrderNotFoundException("Não há pedidos para o id informado!");
     }
-    return orders.stream()
-        .map(order -> new OrderResponseDTO(order.getQuantity(), order.getAmount(), order.getDate(), order.getStatus(),
-            order.getOrderCode()))
-        .toList();
+
+    return orders.map(order -> new OrderResponseDTO(order.getQuantity(), order.getAmount(), order.getDate(),
+        order.getStatus(), order.getOrderCode()));
   }
 
   public void updateOrderStatus(UpdateOrderStatusDTO dto) {
@@ -62,6 +65,7 @@ public class OrderService {
         .orElseThrow(() -> new OrderNotFoundException("Pedido não encontrado com o código: " + dto.getOrderCode()));
 
     order.setStatus(dto.getNewStatus());
+    orderRepository.save(order);
   }
 
   private String generateOrderCode() {

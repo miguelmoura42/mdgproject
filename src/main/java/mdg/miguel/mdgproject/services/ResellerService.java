@@ -1,9 +1,8 @@
 package mdg.miguel.mdgproject.services;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import mdg.miguel.mdgproject.dtos.ResellerDTO;
@@ -32,20 +31,20 @@ public class ResellerService {
     resellerRepository.save(reseller);
   }
 
-  public List<ResellerDTO> searchByName(String name) {
-    List<Reseller> resellers = resellerRepository.findByNameContainingIgnoreCase(name);
+  public Page<ResellerDTO> searchByName(String name, Pageable pageable) {
+    Page<Reseller> resellers = resellerRepository.findByNameContainingIgnoreCase(name, pageable);
     if (resellers.isEmpty()) {
       throw new ResellerNotFoundException("Nenhum revendedor encontrado com o nome: " + name);
     }
-    return resellers.stream().map(this::convertToDto).collect(Collectors.toList());
+    return resellers.map(this::convertToDto);
   }
 
-  public List<ResellerDTO> searchByCity(Cities city) {
-    List<Reseller> resellers = resellerRepository.findByCity(city);
+  public Page<ResellerDTO> searchByCity(Cities city, Pageable pageable) {
+    Page<Reseller> resellers = resellerRepository.findByCity(city, pageable);
     if (resellers.isEmpty()) {
-      throw new ResellerNotFoundException("Nenhum revendedor encontrado nessa cidade: " + city);
+      throw new ResellerNotFoundException("Nenhum revendedor encontrado na cidade: " + city);
     }
-    return resellers.stream().map(this::convertToDto).collect(Collectors.toList());
+    return resellers.map(this::convertToDto);
   }
 
   public Reseller getAndValidateReseller(String uniqueKey) {

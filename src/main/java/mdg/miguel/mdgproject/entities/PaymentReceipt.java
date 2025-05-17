@@ -10,6 +10,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import mdg.miguel.mdgproject.enums.PaymentMethod;
 import mdg.miguel.mdgproject.enums.PaymentType;
@@ -32,7 +33,13 @@ public class PaymentReceipt {
   private Long paymentAmount;
   private String receiptFilePath;
   @Column(unique = true, nullable = false)
-  private UUID uuid = UUID.randomUUID();
+  private UUID uuid;
+
+  @PrePersist
+  private void generateUuid() {
+    if (uuid == null)
+      uuid = UUID.randomUUID();
+  }
 
   public PaymentReceipt() {
   }

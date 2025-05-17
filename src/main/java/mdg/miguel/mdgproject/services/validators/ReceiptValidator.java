@@ -16,21 +16,27 @@ public class ReceiptValidator {
   public void validate(PaymentReceiptDTO dto) {
     Map<String, String> errors = new LinkedHashMap<>();
 
-    Map<Supplier<Boolean>, String> validations = new LinkedHashMap<>();
-    validations.put(() -> dto.description() == null || dto.description().trim().isEmpty(),
-        "Descrição é um campo obrigatório");
-    validations.put(() -> dto.paymentType() == null, "Tipo de pagamento é um campo obrigatório");
-    validations.put(() -> dto.paymentMethod() == null, "Método de pagamento é um campo obrigatório");
-    validations.put(() -> dto.paymentDate() == null, "Data é um campo obrigatório");
-    validations.put(() -> dto.paymentDate().isAfter(LocalDate.now()), "Data inválida: não pode ser futura");
-    validations.put(() -> dto.paymentAmount() == null || dto.paymentAmount() <= 0,
-        "Valor do pagamento inválido, verifique o valor informado.");
-    validations.put(() -> dto.receiptFile() == null || dto.receiptFile().isEmpty(),
-        "Comprovante de pagamento é obrigatório");
+    Map<String, Supplier<Boolean>> validations = new LinkedHashMap<>();
+    validations.put("descricao.vazia", () -> dto.description() == null || dto.description().trim().isEmpty());
+    validations.put("tipo.nulo", () -> dto.paymentType() == null);
+    validations.put("metodo.nulo", () -> dto.paymentMethod() == null);
+    validations.put("data.nula", () -> dto.paymentDate() == null);
+    validations.put("data.futura", () -> dto.paymentDate() != null && dto.paymentDate().isAfter(LocalDate.now()));
+    validations.put("valor.invalido", () -> dto.paymentAmount() == null || dto.paymentAmount() <= 0);
+    validations.put("arquivo.vazio", () -> dto.receiptFile() == null || dto.receiptFile().isEmpty());
 
-    validations.forEach((condition, message) -> {
+    Map<String, String> messages = Map.of(
+        "descricao.vazia", "Descrição é um campo obrigatório.",
+        "tipo.nulo", "Tipo de pagamento é um campo obrigatório.",
+        "metodo.nulo", "Método de pagamento é um campo obrigatório.",
+        "data.nula", "A data do pagamento não pode ser nula.",
+        "data.futura", "A data do pagamento não pode estar no futuro.",
+        "valor.invalido", "Valor do pagamento inválido (nulo ou menor/igual a zero).",
+        "arquivo.vazio", "Comprovante de pagamento é obrigatório.");
+
+    validations.forEach((key, condition) -> {
       if (condition.get()) {
-        errors.put(message.split(" ")[0].toLowerCase(), message);
+        errors.put(key, messages.get(key));
       }
     });
 

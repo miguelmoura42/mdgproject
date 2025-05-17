@@ -1,8 +1,11 @@
 package mdg.miguel.mdgproject.controllers;
 
 import java.time.LocalDate;
-import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -35,10 +38,14 @@ public class OrderController {
   }
 
   @GetMapping("/buscar")
-  public ResponseEntity<List<OrderResponseDTO>> getOrders(@RequestParam Long resellerId,
-      @RequestParam LocalDate firstDate, @RequestParam LocalDate lastDate) {
-    List<OrderResponseDTO> response = orderService.getOrdersByReseller(resellerId, firstDate, lastDate);
-    return ResponseEntity.ok().body(response);
+  public ResponseEntity<Page<OrderResponseDTO>> getOrders(
+      @RequestParam Long resellerId,
+      @RequestParam LocalDate firstDate,
+      @RequestParam LocalDate lastDate,
+      @PageableDefault(size = 20, sort = "date", direction = Sort.Direction.DESC) Pageable pageable) {
+
+    Page<OrderResponseDTO> orders = orderService.getOrdersByReseller(resellerId, firstDate, lastDate, pageable);
+    return ResponseEntity.ok(orders);
   }
 
   @PatchMapping("/atualizar-status")
