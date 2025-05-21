@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.core.io.Resource;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -41,16 +42,16 @@ public class ReceiptController {
   @GetMapping("/buscar-por-tipo")
   public ResponseEntity<List<ReceiptResponseDTO>> getByPaymentType(
       @RequestParam PaymentType paymentType,
-      @RequestParam LocalDate startDate,
-      @RequestParam LocalDate endDate) {
+      @RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate startDate,
+      @RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate endDate) {
     return ResponseEntity.ok(receiptService.getReceiptsByPaymentType(paymentType, startDate, endDate));
   }
 
   @GetMapping("/buscar-por-metodo")
   public ResponseEntity<List<ReceiptResponseDTO>> getByPaymentMethod(
       @RequestParam PaymentMethod paymentMethod,
-      @RequestParam LocalDate startDate,
-      @RequestParam LocalDate endDate) {
+      @RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate startDate,
+      @RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate endDate) {
     return ResponseEntity.ok(receiptService.getReceiptsByPaymentMethod(paymentMethod, startDate, endDate));
   }
 

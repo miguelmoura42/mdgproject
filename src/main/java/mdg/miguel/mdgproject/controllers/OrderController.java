@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -40,8 +41,8 @@ public class OrderController {
   @GetMapping("/buscar")
   public ResponseEntity<Page<OrderResponseDTO>> getOrders(
       @RequestParam Long resellerId,
-      @RequestParam LocalDate firstDate,
-      @RequestParam LocalDate lastDate,
+      @RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate firstDate,
+      @RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate lastDate,
       @PageableDefault(size = 20, sort = "date", direction = Sort.Direction.DESC) Pageable pageable) {
 
     Page<OrderResponseDTO> orders = orderService.getOrdersByReseller(resellerId, firstDate, lastDate, pageable);
